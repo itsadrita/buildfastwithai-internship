@@ -1,0 +1,121 @@
+User: what is this document about?
+Assistant: This document is about an assignment for building a Retrieval-Augmented Generation (RAG) based Chatbot using Python and LangChain. The assignment has three key tasks: 
+
+1. Data Loading: Load a dataset of choice and format it for easy querying.
+2. Set Up RAG with LangChain: Use LangChain's tools to set up a Retrieval-Augmented Generation pipeline.
+3. Build the Chatbot: Build a Chatbot that can answer questions from users based on the loaded data.
+
+The assignment aims to assess skills in RAG, Python, and LangChain for building a Chat application. The submission guidelines include uploading relevant files to GitHub, including comments in the code, and properly citing external sources. 
+
+If you have any questions or need guidance, you can contact shubham@buildfastwithai.com or satvik@buildfastwithai.com.
+
+User: can you generate me a sample code or give me an rough idea on how to do this?
+Assistant: Here's a rough idea of how you can approach this assignment:
+
+**Task 1: Data Loading**
+
+* Choose a dataset (e.g., CSV, JSON, or any document format) that will serve as the knowledge base for your RAG Chatbot.
+* Load the dataset into a Python data structure (e.g., Pandas DataFrame) for easy querying.
+* Preprocess the data by tokenizing the text, removing stop words, and converting all text to lowercase.
+
+Example code:
+```python
+import pandas as pd
+
+# Load dataset
+df = pd.read_csv('data.csv')
+
+# Preprocess data
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+stop_words = set(stopwords.words('english'))
+
+def preprocess_text(text):
+    tokens = word_tokenize(text)
+    tokens = [token.lower() for token in tokens if token.isalpha()]
+    tokens = [token for token in tokens if token not in stop_words]
+    return ' '.join(tokens)
+
+df['text'] = df['text'].apply(preprocess_text)
+```
+
+**Task 2: Set Up RAG with LangChain**
+
+* Install LangChain using pip: `pip install langchain`
+* Import LangChain and create an instance of the `LLMChain` class.
+* Define a function to retrieve relevant documents from the knowledge base based on a given query.
+* Define a function to generate answers based on the retrieved documents.
+
+Example code:
+```python
+import langchain
+
+# Create an instance of LLMChain
+llm_chain = langchain.LLMChain(llm=langchain.llms.HuggingFaceHub())
+
+# Define a function to retrieve relevant documents
+def retrieve_documents(query):
+    # Use the preprocessed data to retrieve relevant documents
+    relevant_docs = df[df['text'].str.contains(query)]
+    return relevant_docs
+
+# Define a function to generate answers
+def generate_answer(query):
+    # Retrieve relevant documents
+    relevant_docs = retrieve_documents(query)
+    
+    # Generate answer based on the retrieved documents
+    answer = llm_chain(query, relevant_docs)
+    return answer
+```
+
+**Task 3: Build the Chatbot**
+
+* Create a simple chatbot interface using a Python library like `tkinter` or `streamlit`.
+* Define a function to handle user input and generate responses using the `generate_answer` function.
+* Display the chatbot responses in the interface.
+
+Example code:
+```python
+import streamlit as st
+
+# Create a chatbot interface
+st.title('RAG Chatbot')
+
+# Define a function to handle user input
+def handle_input():
+    user_input = st.text_input('Enter your question:')
+    if user_input:
+        answer = generate_answer(user_input)
+        st.write('Answer:', answer)
+
+# Display the chatbot interface
+handle_input()
+```
+
+**Bonus: Deploy on Streamlit**
+
+* Create a Streamlit app using the `streamlit` library.
+* Deploy the app on Streamlit Cloud or a local server.
+
+Example code:
+```python
+import streamlit as st
+
+# Create a Streamlit app
+st.title('RAG Chatbot')
+
+# Define a function to handle user input
+def handle_input():
+    user_input = st.text_input('Enter your question:')
+    if user_input:
+        answer = generate_answer(user_input)
+        st.write('Answer:', answer)
+
+# Display the Streamlit app
+if __name__ == '__main__':
+    handle_input()
+```
+
+Note that this is just a rough idea, and you will need to modify the code to fit your specific requirements. Additionally, you will need to ensure that your code is well-documented and follows Python coding standards.
